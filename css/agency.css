@@ -273,9 +273,9 @@ fieldset[disabled] .btn-xl.active {
 
 header {
     text-align: center;
-    color: #fff;
+    color: blue;
     background-attachment: scroll;
-    background-image: url(../img/header_ceu.jpg);
+    background-image: url(../img/jesus-g.jpg);
     background-position: center center;
     background-repeat: none;
     -webkit-background-size: cover;
