@@ -44,8 +44,14 @@ a.active {
     outline: 0;
 }
 
-a {
+a.a-blue {
     color: #0C71A2;
+}
+
+
+
+a {
+    color: #fed136;
 }
 
 a:hover,
