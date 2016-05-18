@@ -1033,12 +1033,12 @@
 	<script>
 		$(document).ready(function(){
 		    $(".proximo-ritual").each(function(index, value) {
-		    	console.log(value);
+		    	//console.log(value);
 		    	var hoje = new Date();
 		    	var data = new Date(value.getAttribute("data"));
 		    	data.setDate(data.getDate() + 1); //Adicionando 1 dia
 				if (hoje > data) {
-		    		console.log(hoje + " - " + data);
+		    		//console.log(hoje + " - " + data);
 		    		$(value).hide();
 				}
 	
