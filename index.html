@@ -47,7 +47,7 @@
 
 </head>
 
-<body id="page-top" class="index">
+<body id="page-top" class="index" ng-app="clcecvvApp" ng-controller="clcecvvCtrl">
 
 	<!-- Navigation -->
 	<nav class="navbar navbar-default navbar-fixed-top">
@@ -64,11 +64,13 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li class="hidden"><a href="#page-top"></a></li>
+					<li><a class="page-scroll" href="#proximos_eventos">Próximos Eventos</a></li>
+					<li><a class="page-scroll" href="#leitura">Leitura</a></li>
+					<li><a class="page-scroll" href="#rituais">Rituais</a></li>
 					<li><a class="page-scroll" href="#instituto">Instituto</a></li>
 					<li><a class="page-scroll" href="#ayahuasca">Ayahuasca</a></li>
-					<li><a class="page-scroll" href="#rituais">Rituais</a></li>
 					<li><a class="page-scroll" href="#normas">Normas</a></li>
-					<li><a class="page-scroll" href="#equipe">Equipe</a></li>
+					<!-- <li><a class="page-scroll" href="#equipe">Equipe</a></li> -->
 					<li><a class="page-scroll" href="#contato">Contato</a></li>
 				</ul>
 			</div>
@@ -114,26 +116,20 @@
 			<div class="row">
 				<div class="col-lg-12 text-center">
 					<div style="width:100%; max-width: 700px; margin: 0 auto">
-						<h2>Próximos Rituais</h2>
+						<h2>Próximos Eventos</h2>
 					</div>
-				</div>
+				</div>				
 				
-				<p>&nbsp;</p>
-				<div class="proximo-ritual col-lg-12 text-center intro-text" data="2016/10/22">
+				<div class="proximo-ritual col-lg-12 text-center intro-text" ng-repeat="ritual in rituais">
 					<div style="width:100%; max-width: 700px; margin: 0 auto">
-						<h3 style="text-align:center">Sábado 22 de Outubro às 21:00 horas pontualmente</h3>
-						<img width="100%" alt="Ritual com a Sagrada Ayahuasca em Celebração da Umbanda" title="Ritual com a Sagrada Ayahuasca em Celebração da Umbanda" src="img/rituais/ayahuasca-20161022.jpg">
+						<h3 style="text-align:center">{{ritual.dataTexto}}</h3>
+						<img width="100%" alt="{{ritual.titulo}}" title="{{ritual.titulo}}" src="{{ritual.imagem.fields.file.url}}">
 						<div class="intro-lead-in">
-							<p><h3>Ritual de Curas e Bençãos com a Sagrada Ayahuasca em “Celebração da Umbanda”</h3></p>
-							<p>Convidamos a todos a mais um maravilhoso Ritual de Curas e Bençãos com a Sagrada Ayahuasca em “Celebração da Umbanda”, Sábado 22/10/2016 às 21:00 horas pontualmente, conforme convite em anexo.</p>
-							<p>Os portões estarão abertos a partir das 20:00 horas e fechados às 20:45 horas.</p>
-							<p>No site maiores informações sobre as normas, horários de carona e vestimenta adequada de homens e mulheres para um Ritual Espiritual.</p>
-							<p>Na Serra a temperatura cai bastante, pedimos que tragam seu agasalho, colchonete e cobertor</p>
-							<p>No final do Ritual é de costume fazermos uma Confraternização, sintam em seu coração e tragam frutas, suco ou alimento de seu agrado.</p>
-							<p>Nossa casa precisa de velas, incensos e papel higiênico e pedimos sua colaboração.</p>
-							<p>Céu Luz e Caridade e Céu Viva Vida !</p>
+							<p><h3>{{ritual.titulo}}</h3></p>
+							{{ritual.descricao}}
 						</div>
 					</div>
+					<p>&nbsp;</p>
 				</div>
 			</div>
 		</div>
@@ -214,12 +210,12 @@
 	</section>
 
 	<!-- About Section -->
-	<section id="agenda">
+	<section id="rituais">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-					<h2 class="section-heading">Próximos Rituais</h2>
-					<h3 class="section-subheading text-muted">Acompanhe aqui quando serão realizados nossos próximos rituais</h3>
+					<h2 class="section-heading">Rituais</h2>
+					<h3 class="section-subheading text-muted">Acompanhe aqui nossos rituais</h3>
 				</div>
 			</div>
 			<div class="row">
@@ -231,9 +227,9 @@
 							</div>
 							<div class="timeline-panel">
 								<div class="timeline-heading">
-									<h4>22 de Outubro - Sábado</h4>
-									<h4 class="subheading">Sagrada Ayahuasca</h4>
-									<h4 class="subheading">Celebração à Umbanda</h4>
+									<h4 class="hide">22 de Outubro - Sábado</h4>
+									<h4 class="subheading ">Sagrada Ayahuasca</h4>
+									<h4 class="subheading hide">Celebração à Umbanda</h4>
 								</div>
 								<div class="timeline-body">
 									<p class="text-muted hide">
@@ -1014,6 +1010,11 @@
 
 	<!-- jQuery -->
 	<script src="js/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="https://npmcdn.com/contentful@latest/browser-dist/contentful.min.js"></script>
+<script>
+
+</script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
@@ -1030,19 +1031,43 @@
 	<!-- Custom Theme JavaScript -->
 	<script src="js/agency.js"></script>
 	<script>
-		$(document).ready(function(){
-		    $(".proximo-ritual").each(function(index, value) {
-		    	//console.log(value);
-		    	var hoje = new Date();
-		    	var data = new Date(value.getAttribute("data"));
-		    	data.setDate(data.getDate() + 1); //Adicionando 1 dia
-				if (hoje > data) {
-		    		//console.log(hoje + " - " + data);
-		    		$(value).hide();
+		var client = contentful.createClient({
+		  // This is the space ID. A space is like a project folder in Contentful terms
+		  space: 'lwue28clesj3',
+		  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+		  accessToken: 'a1d1b70d644f32ab9d134debd0b8a22818a725d8c5f2a81a87260225fc2583ee'
+		})
+		var app = angular.module('clcecvvApp', []);
+	    app.controller('clcecvvCtrl', function($scope) {
+
+			client.getEntries().then(function (entries) {
+				// log the title for all the entries that might have it
+				console.log(entries);
+				var rituais = [];
+				for (var i = 0; i < entries.total; i++) {
+					var entry = entries.items[i].fields;
+					var dataRitual = new Date(entry.data);
+
+					if (podeMostrarRitual(dataRitual)) {
+						rituais.push(entry);
+					}
 				}
-	
-		    });
-		});
+				console.log(rituais);
+				$scope.rituais = rituais;
+			});
+
+
+	    });
+
+		function podeMostrarRitual(dataRitual) {
+			var hoje = new Date();
+	    	dataRitual.setDate(dataRitual.getDate() + 1); //Adicionando 1 dia
+			if (hoje > dataRitual) {
+	    		return false;
+			} else {
+				return true;
+			}
+		}
 	</script>
 </body>
 
