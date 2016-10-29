@@ -1030,6 +1030,21 @@
 	<!-- Custom Theme JavaScript -->
 	<!-- <script src="js/agency.js"></script> -->
 	<script>
+
+		if (!String.prototype.endsWith) {
+		  String.prototype.endsWith = function(searchString, position) {
+		      var subjectString = this.toString();
+		      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+		        position = subjectString.length;
+		      }
+		      position -= searchString.length;
+		      var lastIndex = subjectString.lastIndexOf(searchString, position);
+		      return lastIndex !== -1 && lastIndex === position;
+		  };
+		}
+
+		var testeMode = window.location.href.endsWith('teste');
+
 		var client = contentful.createClient({
 		  // This is the space ID. A space is like a project folder in Contentful terms
 		  space: 'lwue28clesj3',
@@ -1045,13 +1060,15 @@
 				var rituais = [];
 				for (var i = 0; i < entries.total; i++) {
 					var entry = entries.items[i].fields;
-					var dataRitual = new Date(entry.data);
+					if (testeMode == true || entry.modoDeTeste == false) {
+						var dataRitual = new Date(entry.data);
 
-					if (podeMostrarRitual(dataRitual)) {
-						entry.descricaoSanity = entry.descricao.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p>\n<p>');
-						console.log(entry.descricaoSanity);
-						entry.descricaoSanity = $sce.trustAsHtml(entry.descricaoSanity);
-						rituais.push(entry);
+						if (podeMostrarRitual(dataRitual)) {
+							entry.descricaoSanity = entry.descricao.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p>\n<p>');
+							console.log(entry.descricaoSanity);
+							entry.descricaoSanity = $sce.trustAsHtml(entry.descricaoSanity);
+							rituais.push(entry);
+						}
 					}
 				}
 				// console.log(rituais);
