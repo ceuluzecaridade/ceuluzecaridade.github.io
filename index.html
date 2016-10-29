@@ -25,6 +25,13 @@
 <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
+
+	<!-- jQuery -->
+	<script src="js/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.min.js"></script>
+	<script src="https://npmcdn.com/contentful@latest/browser-dist/contentful.min.js"></script>
+
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -118,15 +125,14 @@
 					<div style="width:100%; max-width: 700px; margin: 0 auto">
 						<h2>Próximos Eventos</h2>
 					</div>
-				</div>				
-				
+				</div>
 				<div class="proximo-ritual col-lg-12 text-center intro-text" ng-repeat="ritual in rituais">
 					<div style="width:100%; max-width: 700px; margin: 0 auto">
 						<h3 style="text-align:center">{{ritual.dataTexto}}</h3>
-						<img width="100%" alt="{{ritual.titulo}}" title="{{ritual.titulo}}" src="{{ritual.imagem.fields.file.url}}">
+						<img width="100%" alt="{{ritual.titulo}}" title="{{ritual.titulo}}" src="http:{{ritual.imagem.fields.file.url}}">
 						<div class="intro-lead-in">
 							<p><h3>{{ritual.titulo}}</h3></p>
-							{{ritual.descricao}}
+							<div ng-bind-html="ritual.descricaoSanity"></div>
 						</div>
 					</div>
 					<p>&nbsp;</p>
@@ -1008,13 +1014,6 @@
 	</div>
 
 
-	<!-- jQuery -->
-	<script src="js/jquery.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-	<script src="https://npmcdn.com/contentful@latest/browser-dist/contentful.min.js"></script>
-<script>
-
-</script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
@@ -1026,10 +1025,10 @@
 
 	<!-- Contact Form JavaScript -->
 	<script src="js/jqBootstrapValidation.js"></script>
-	<script src="js/contact_me.js"></script>
+	<!-- <script src="js/contact_me.js"></script> -->
 
 	<!-- Custom Theme JavaScript -->
-	<script src="js/agency.js"></script>
+	<!-- <script src="js/agency.js"></script> -->
 	<script>
 		var client = contentful.createClient({
 		  // This is the space ID. A space is like a project folder in Contentful terms
@@ -1038,26 +1037,30 @@
 		  accessToken: 'a1d1b70d644f32ab9d134debd0b8a22818a725d8c5f2a81a87260225fc2583ee'
 		})
 		var app = angular.module('clcecvvApp', []);
-	    app.controller('clcecvvCtrl', function($scope) {
+	    app.controller('clcecvvCtrl', ['$scope', '$sce', function($scope, $sce) {
 
-			client.getEntries().then(function (entries) {
+			client.getEntries({content_type: 'rituais', order: 'fields.data'}).then(function(entries) {
 				// log the title for all the entries that might have it
-				console.log(entries);
+				// console.log(entries);
 				var rituais = [];
 				for (var i = 0; i < entries.total; i++) {
 					var entry = entries.items[i].fields;
 					var dataRitual = new Date(entry.data);
 
 					if (podeMostrarRitual(dataRitual)) {
+						entry.descricaoSanity = entry.descricao.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p>\n<p>');
+						console.log(entry.descricaoSanity);
+						entry.descricaoSanity = $sce.trustAsHtml(entry.descricaoSanity);
 						rituais.push(entry);
 					}
 				}
-				console.log(rituais);
+				// console.log(rituais);
 				$scope.rituais = rituais;
+				$scope.$apply();
 			});
 
 
-	    });
+	    }]);
 
 		function podeMostrarRitual(dataRitual) {
 			var hoje = new Date();
