@@ -131,7 +131,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				<div class="proximo-ritual col-lg-12 text-center intro-text" ng-repeat="ritual in rituais">
 					<div style="width:100%; max-width: 700px; margin: 0 auto">
 						<h3 style="text-align:center">{{ritual.dataTexto}}</h3>
-						<img width="100%" alt="{{ritual.titulo}}" title="{{ritual.titulo}}" src="http:{{ritual.imagem.fields.file.url}}">
+						<img width="100%" alt="{{ritual.titulo}}" title="{{ritual.titulo}}" src="{{ritual.imagem.fields.file.url}}">
 						<div class="intro-lead-in">
 							<p><h3>{{ritual.titulo}}</h3></p>
 							<div ng-bind-html="ritual.descricaoSanity"></div>
@@ -1063,7 +1063,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		var app = angular.module('clcecvvApp', []);
 	    app.controller('clcecvvCtrl', ['$scope', '$sce', function($scope, $sce) {
 
-			client.getEntries({content_type: 'rituais', order: 'fields.data'}).then(function(entries) {
+			client.getEntries({content_type: 'rituais', order: 'fields.data', 'fields.exibir': true}).then(function(entries) {
 				// log the title for all the entries that might have it
 				// console.log(entries);
 				var rituais = [];
