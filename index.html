@@ -1074,7 +1074,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 						if (podeMostrarRitual(dataRitual)) {
 							entry.descricaoSanity = entry.descricao.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p>\n<p>');
-							console.log(entry.descricaoSanity);
+							//console.log(entry.descricaoSanity);
 							entry.descricaoSanity = $sce.trustAsHtml(entry.descricaoSanity);
 							rituais.push(entry);
 						}
